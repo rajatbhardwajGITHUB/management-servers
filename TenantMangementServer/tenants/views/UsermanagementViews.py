@@ -10,8 +10,11 @@ from tenants.models import User
 import tenants.utils
 from django.contrib.auth.hashers import check_password
 from django.views.decorators.csrf import csrf_exempt
+from rest_framework.permissions import AllowAny
+
 
 class TenantCreateView(APIView):
+    permission_classes = [AllowAny]
     def post(self, request):
         serializer = TenantSerializer(data=request.data)
         if serializer.is_valid():
@@ -40,15 +43,19 @@ def login(request):
             data = json.loads(request.body)
             email= data.get("email")
             password = data.get("password") #hashed password
+            print(email,password)
 
             try:
                 user = User.objects.get(email=email)
+                print(user)
             except User.DoesNotExist:
                 return JsonResponse({"error":"Invalid credentials"}, status=400)
             
             if check_password(password, user.password):
-                access_token, refresh_token = generate_jwt_token(user) 
+                access_token, refresh_token = tenants.utils.generate_jwt_token(user) 
                 #add the token to the user in db
+                print("Access Token: ", access_token)
+                print("Refresh Token: ", refresh_token)
                 User.objects.filter(email=email).update(access_token=access_token)
                 User.objects.filter(email=email).update(refresh_token=refresh_token)
                 return JsonResponse({"access_token":access_token, "refresh_token":refresh_token}, status=200)

@@ -25,7 +25,7 @@ class User (models.Model):
     phone_number = PhoneNumberField(unique=True)
     password = models.CharField(max_length=255)
     access_token = models.CharField(default="",max_length=255,blank=True)
-    refersh_token = models.CharField(default="",max_length=255,blank=True)
+    refresh_token = models.CharField(default="",max_length=255,blank=True)
     username = models.CharField(max_length=50)
     property_type = models.CharField(
         max_length=50,

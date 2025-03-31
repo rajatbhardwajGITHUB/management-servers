@@ -52,6 +52,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'tenants.middlewares.JwtAuthenticationMiddleWares.JWTAuthenticationMiddleware',
 ]
 
 ROOT_URLCONF = 'TenantMangementServer.urls'
@@ -136,3 +137,13 @@ SECRET_KEY = "H-g5Z-TbTSL4R3LvChoxYatUGsr7ftR2pZEo_5kZCh80N991pmUN1YlGKby9kfexaF
 JWT_ALGORITHM = "HS256"
 JWT_EXPIRATION_TIME = datetime.timedelta(hours=1) # expires in 1 hours
 JWT_REFRESH_EXPIRATION_TIME = datetime.timedelta(days=7) 
+
+REST_FRAMEWORK = {
+    'DEFAULT_PERMISSION_CLASSES': [
+        'rest_framework.permissions.IsAuthenticated',  # Default: Requires authentication
+    ],
+    'DEFAULT_AUTHENTICATION_CLASSES': [
+        'rest_framework.authentication.SessionAuthentication',
+        'rest_framework.authentication.TokenAuthentication',
+    ],
+}
