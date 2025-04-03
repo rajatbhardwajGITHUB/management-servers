@@ -53,6 +53,9 @@ MIDDLEWARE = [
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'tenants.middlewares.JwtAuthenticationMiddleWares.JWTAuthenticationMiddleware',
+    'tenants.middlewares.csrfAuthenticationMiddleWares.SetCSRFTokenMiddleware',
+    
+
 ]
 
 ROOT_URLCONF = 'TenantMangementServer.urls'

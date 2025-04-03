@@ -8,9 +8,12 @@ from rest_framework.views import APIView
 from tenants.TenantSerializer import TenantSerializer
 from tenants.models import User
 import tenants.utils
+from django.views.decorators.csrf import ensure_csrf_cookie
+from rest_framework.permissions import IsAuthenticated 
 from django.contrib.auth.hashers import check_password
 from django.views.decorators.csrf import csrf_exempt
 from rest_framework.permissions import AllowAny
+from tenants.FDAWs.UserFdaws import get_user_details_for_dashboard
 
 
 class TenantCreateView(APIView):
@@ -63,7 +66,14 @@ def login(request):
                 return JsonResponse({"error":"Invalid credentials"}, status=400)
         except Exception as e:
             return JsonResponse({"error":str(e)},status=500)
-# create the middleware
-# create a protected view 
-# define urls
-#
+
+class DashboardView(APIView):
+    permission_classes = [IsAuthenticated] 
+    
+    def get(self, request):
+        # get all the neccessary fields form the user model
+        # and return it to front end
+
+        user_detail_list = get_user_details_for_dashboard(request);
+        print(user_detail_list)
+        return JsonResponse({"data":user_detail_list}, status=200)

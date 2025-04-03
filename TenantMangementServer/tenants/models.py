@@ -43,7 +43,14 @@ class User (models.Model):
         default = LeaseType.FIXED
     )
     
+    is_active = models.BooleanField(default=True)  # Add this line
+    is_staff = models.BooleanField(default=False)
     
+
+    @property
+    def is_authenticated(self):
+        # Return True to indicate the user is authenticated
+        return True
 
 
     def save(self, *args, **kwargs):
